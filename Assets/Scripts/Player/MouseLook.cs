@@ -10,7 +10,7 @@ public class MouseLook : MonoBehaviour {
 	public float minAngle, maxAngle;
 
 	void Update(){
-
+		
 		//Rotate transform with respect to 'Mouse X' and 'Mouse Y'
 		float deltaY = Input.GetAxis("Mouse X") * rotateSpd.x * Time.deltaTime;
 		float deltaX = Input.GetAxis("Mouse Y") * rotateSpd.y * Time.deltaTime;
