@@ -2,68 +2,73 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof (Rigidbody))]
+[RequireComponent(typeof (CharacterController))]
 public class PlayerController : MonoBehaviour {
 
 	//Variables
-	[Tooltip("Maximum running velocity of the rigidbody.")]
-	public float maxVelocity;
-	[Tooltip("The time it takes to accelerate to maximum running velocity from 0m/s.")]
+	[Tooltip("Maximum running speed of the rigidbody.")]
+	public float maxSpeed;
+	[Tooltip("The time it takes to accelerate to maximum running speed from 0m/s.")]
 	public float accelTime;
-	[Tooltip("The time it takes to deaccelerate to 0m/s from maximum running velocity.")]
+	[Tooltip("The time it takes to deaccelerate to 0m/s from maximum running speed.")]
 	public float deaccelTime;
 	[Range(0f, 1f)]
 	[Tooltip("How fast the controller is at changing it's direction when running.")]
 	public float steeringSpd;
 
-	private float acceleration, deacceleration;
+	private float speed, acceleration, deacceleration;
 
 	//Objects
 	[Tooltip("The transform with the direction for the controller to run in.")]
 	public Transform cam;
 	[Tooltip("The character model to rotate and animate.")]
 	public GameObject characterModel;
-	private Rigidbody rb;
+	private CharacterController controller;
 
 	void Start(){
-
 		//Variables
-		acceleration = maxVelocity / accelTime;     //This is similar to calculating speed using distance/time, setting the desired velocity and
-		deacceleration = maxVelocity / deaccelTime; //time is a lot easier to understand and predict, than setting the actual acceleration
+		acceleration = maxSpeed / accelTime;     //This is similar to calculating speed using distance/time, setting the desired velocity and
+		deacceleration = maxSpeed / deaccelTime; //time is a lot easier to understand and predict, than setting the actual acceleration
 
 		//Objects
-		rb = this.GetComponent<Rigidbody> ();
-
+		controller = this.GetComponent<CharacterController>();
 	}
 
 	void Update(){
 
-		//Rotate
-		if (rb.velocity.magnitude > 0.05f) {
-			Vector3 angles = characterModel.transform.localEulerAngles;
-			float yDiff = Mathf.LerpAngle (angles.y, cam.transform.localEulerAngles.y, 0.05f);
-			characterModel.transform.localEulerAngles = new Vector3 (angles.x, yDiff, angles.z);
-		}
+		//Move
+		if ((Input.GetAxisRaw ("Vertical") != 0) || (Input.GetAxisRaw ("Horizontal") != 0)) {
 
-	}
-
-	void FixedUpdate(){
-		if (Input.GetKey (KeyCode.W)) {
-			Vector3 direction = new Vector3 (characterModel.transform.forward.x, 0f, characterModel.transform.forward.z);
-			rb.AddForce (direction * acceleration * Time.fixedDeltaTime, ForceMode.VelocityChange);
-			if (rb.velocity.magnitude > maxVelocity) {
-				rb.velocity /= rb.velocity.magnitude / maxVelocity;
+			//Set Speed
+			if (speed < maxSpeed){
+				speed += acceleration * Time.deltaTime; //Accelerate
+			}else if (speed > maxSpeed) {
+				speed = maxSpeed; //Stop Accelerating
 			}
-			Debug.Log (rb.velocity.magnitude);
+				
+			//Takes the input and read it as an angle
+			float inDir = Mathf.Atan(Input.GetAxisRaw ("Horizontal") / Input.GetAxisRaw ("Vertical")) * (180f / Mathf.PI);
+			if (Input.GetAxisRaw ("Vertical") < 0f){
+				inDir += 180f; //Requirement when using the Atan function
+			}
+
+			//Steer the character to the desired direction using steeringSpd, inputDirection and the camera direction
+			Vector3 modelAngle = characterModel.transform.localEulerAngles;
+			float yAngleShift = Mathf.LerpAngle (modelAngle.y, cam.transform.localEulerAngles.y + inDir, steeringSpd);
+			characterModel.transform.localEulerAngles = new Vector3 (modelAngle.x, yAngleShift, modelAngle.z);
+
 		} else {
-			if (rb.velocity.magnitude > 0f) {
-				rb.AddForce (-rb.velocity * deacceleration * Time.fixedDeltaTime, ForceMode.VelocityChange);
+			//Slow down to stop
+			if (speed > 0f) {
+				speed -= deacceleration * Time.deltaTime;
+			} else if (speed < 0f) {
+				speed = 0f;
 			}
 		}
-	}
 
-	float vec2Angle(Vector2 vecIn){
-		return Mathf.Atan2 (vecIn.y, vecIn.x);
+		//Move the character (even when there is no input, so the character can deaccelerate instead of just stopping instantly)
+		controller.SimpleMove (speed * characterModel.transform.forward.normalized);
+
 	}
 		
 }
