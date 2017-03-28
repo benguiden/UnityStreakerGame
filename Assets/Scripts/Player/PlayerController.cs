@@ -23,7 +23,9 @@ public class PlayerController : MonoBehaviour {
 	public Transform cam;
 	[Tooltip("The character model to rotate and animate.")]
 	public GameObject characterModel;
+
 	private CharacterController controller;
+	private Animator anm;
 
 	void Start(){
 		//Variables
@@ -32,6 +34,7 @@ public class PlayerController : MonoBehaviour {
 
 		//Objects
 		controller = this.GetComponent<CharacterController>();
+		anm = this.GetComponentInChildren<Animator> ();
 	}
 
 	void Update(){
@@ -68,6 +71,15 @@ public class PlayerController : MonoBehaviour {
 
 		//Move the character (even when there is no input, so the character can deaccelerate instead of just stopping instantly)
 		controller.SimpleMove (speed * characterModel.transform.forward.normalized);
+
+
+		//Animation
+		anm.SetFloat("speed", speed);
+
+		//Set Speed of running animation
+		AnimatorStateInfo nextState = anm.GetNextAnimatorStateInfo(0);
+		if (nextState.IsName ("Run"))
+			anm.speed = 0.5f + (speed / (2f * maxSpeed));
 
 	}
 		
