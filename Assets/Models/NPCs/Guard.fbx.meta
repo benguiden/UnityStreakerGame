@@ -77,6 +77,8 @@ ModelImporter:
     7400004: NPC|Chase01
     7400006: NPC|Chase01
     7400008: NPC|Dive01
+    7400010: NPC|T-Pose
+    7400012: NPC|Dive01
     9500000: //RootNode
     13700000: GuardMesh
   materials:
@@ -101,17 +103,17 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: NPC|Chase01
-      takeName: GaurdArmature|Run01
+      name: NPC|T-Pose
+      takeName: GaurdArmature|T-Pose
       firstFrame: 0
-      lastFrame: 32
+      lastFrame: 1
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -205,7 +207,101 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: GaurdArmature
+        weight: 1
+      - path: GaurdArmature/hips
+        weight: 1
+      - path: GaurdArmature/hips/spine
+        weight: 1
+      - path: GaurdArmature/hips/spine/chest
+        weight: 1
+      - path: GaurdArmature/hips/spine/chest/neck
+        weight: 1
+      - path: GaurdArmature/hips/spine/chest/neck/head
+        weight: 1
+      - path: GaurdArmature/hips/spine/chest/neck/head/head_end
+        weight: 1
+      - path: GaurdArmature/hips/spine/chest/shoulder.L
+        weight: 1
+      - path: GaurdArmature/hips/spine/chest/shoulder.L/upper_arm.L
+        weight: 1
+      - path: GaurdArmature/hips/spine/chest/shoulder.L/upper_arm.L/forearm.L
+        weight: 1
+      - path: GaurdArmature/hips/spine/chest/shoulder.L/upper_arm.L/forearm.L/forearm.L_end
+        weight: 1
+      - path: GaurdArmature/hips/spine/chest/shoulder.R
+        weight: 1
+      - path: GaurdArmature/hips/spine/chest/shoulder.R/upper_arm.R
+        weight: 1
+      - path: GaurdArmature/hips/spine/chest/shoulder.R/upper_arm.R/forearm.R
+        weight: 1
+      - path: GaurdArmature/hips/spine/chest/shoulder.R/upper_arm.R/forearm.R/forearm.R_end
+        weight: 1
+      - path: GaurdArmature/hips/thigh.L
+        weight: 1
+      - path: GaurdArmature/hips/thigh.L/shin.L
+        weight: 1
+      - path: GaurdArmature/hips/thigh.L/shin.L/foot.L
+        weight: 1
+      - path: GaurdArmature/hips/thigh.L/shin.L/foot.L/toe.L
+        weight: 1
+      - path: GaurdArmature/hips/thigh.L/shin.L/foot.L/toe.L/toe.L_end
+        weight: 1
+      - path: GaurdArmature/hips/thigh.L/shin.L/heel.L
+        weight: 1
+      - path: GaurdArmature/hips/thigh.L/shin.L/heel.L/heel.02.L
+        weight: 1
+      - path: GaurdArmature/hips/thigh.L/shin.L/heel.L/heel.02.L/heel.02.L_end
+        weight: 1
+      - path: GaurdArmature/hips/thigh.R
+        weight: 1
+      - path: GaurdArmature/hips/thigh.R/shin.R
+        weight: 1
+      - path: GaurdArmature/hips/thigh.R/shin.R/foot.R
+        weight: 1
+      - path: GaurdArmature/hips/thigh.R/shin.R/foot.R/toe.R
+        weight: 1
+      - path: GaurdArmature/hips/thigh.R/shin.R/foot.R/toe.R/toe.R_end
+        weight: 1
+      - path: GaurdArmature/hips/thigh.R/shin.R/heel.R
+        weight: 1
+      - path: GaurdArmature/hips/thigh.R/shin.R/heel.R/heel.02.R
+        weight: 1
+      - path: GaurdArmature/hips/thigh.R/shin.R/heel.R/heel.02.R/heel.02.R_end
+        weight: 1
+      - path: GuardMesh
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: NPC|Chase01
+      takeName: GaurdArmature|Run01
+      firstFrame: 0
+      lastFrame: 32
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0

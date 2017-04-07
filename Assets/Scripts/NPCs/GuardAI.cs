@@ -55,19 +55,12 @@ public class GuardAI : MonoBehaviour {
 			}
 
 			//Chase and Steer towards target
-			Vector3 move = NPC.ChaseForce (this.transform.position, target.position, speed, steeringSpd, controller.velocity * Time.deltaTime);
-
-			//Move controller
-			controller.SimpleMove (move);
-
-			//Rotate Object towards velocity
-			if (controller.velocity.normalized != Vector3.zero) //If the character is no moving, we don't want to set their rotation to snap to (0, 0, 0);
-				this.transform.rotation = Quaternion.LookRotation (controller.velocity.normalized);
+			Chase();
 
 			//Change state if close enough to target
 			if (Vector3.Distance (this.transform.position, target.position) <= diveDistance)
 				state = "dive";
-
+			
 			//Set Animation state
 			anm.SetInteger("state", 0);
 
@@ -78,23 +71,24 @@ public class GuardAI : MonoBehaviour {
 		case "dive":
 			////////////////////////////////////////////////
 
-			//Move controller forward
-			controller.SimpleMove (this.transform.forward * maxSpeed * 1.2f);
-
 			//Check if animation is over
 			AnimatorStateInfo anmState = anm.GetCurrentAnimatorStateInfo (0);
-			if ((anmState.normalizedTime >= 1f) && (anmState.IsName("Dive"))) { //NormalizedTime returns the current state time / the animation length, so if this is > 1, the animation is over
-				//Change state to ragdoll
-				state = "ragdoll";
-				recoverCount = recoverTime;
-				//Turn on rigidbodies to ragdoll
-				foreach (Rigidbody rb in ragdollRBs) {
-					rb.isKinematic = false;
-					rb.velocity = controller.velocity * Time.deltaTime;
-					//rb.AddForce (this.transform.forward * maxSpeed * 1.2f, ForceMode.VelocityChange);
+			if (anmState.IsName ("Dive")) {
+				if (anmState.normalizedTime >= 1f) { //NormalizedTime returns the current state time / the animation length, so if this is > 1, the animation is over
+					//Change state to ragdoll
+					state = "ragdoll";
+					recoverCount = recoverTime;
+
+					//Enable Ragdoll
+					RagdollSetActive (true);
+
+				} else if (anmState.normalizedTime >= 0.5f) {
+					//Move controller forward
+					controller.SimpleMove (this.transform.forward * maxSpeed * 1.2f);
+				} else {
+					//Move and rotate controller just like the 'chase' state when normalized time < 0.5f
+					Chase();
 				}
-				//Disable animator to let bones only be effected by the rigidbodies
-				anm.enabled = false;
 			}
 
 			//Set Animation state
@@ -115,19 +109,8 @@ public class GuardAI : MonoBehaviour {
 
 			//Check if recovered
 			if (recoverCount <= 0f) {
-				//'Disable' rigidbodies
-				foreach (Rigidbody rb in ragdollRBs) {
-					rb.isKinematic = true;
-				}
-
-				//Enable animator
-				anm.enabled = true;
-
-				//Translate the Guard parent of the rigidbodies to the position of the 'main' bone
-				Vector3 bonePos = ragdollRBs[0].gameObject.transform.position; //We do this because when the rigidbodies are active (not kinematic), the children objects will translate away from the main parent object,
-				this.transform.position = new Vector3 (bonePos.x, this.transform.position.y, bonePos.z); //while the main parent object stays in place. So when we start using the animator again, the rendering mesh will
-																				//will seem to teleport back to the parent object, instead of where the rigidbodies appeared to stop on the ground.
-																				//That explanation may sound confusing, but you can comment out these lines to see what I'm on about.
+				//Deactivee the ragdolls
+				RagdollSetActive(false);
 
 				//Change state
 				state = "chase";
@@ -136,6 +119,52 @@ public class GuardAI : MonoBehaviour {
 
 			break;
 			////////////////////////////////////////////////
+
+		}
+	}
+
+	private void Chase(){
+		//Chase and Steer towards target
+		Vector3 move = NPC.ChaseForce (this.transform.position, target.position, speed, steeringSpd, controller.velocity * Time.deltaTime);
+			
+		//Move controller
+		controller.SimpleMove (move);
+
+		//Rotate Object towards velocity
+		if (controller.velocity.normalized != Vector3.zero) //If the character is no moving, we don't want to set their rotation to snap to (0, 0, 0);
+			this.transform.rotation = Quaternion.LookRotation (controller.velocity.normalized);
+
+	}
+
+	private void RagdollSetActive(bool active){
+		if (active) {
+		//Enable
+		
+			//'Enable' rigidbodies to ragdoll
+			foreach (Rigidbody rb in ragdollRBs) {
+				rb.isKinematic = false;
+				rb.velocity = controller.velocity * Time.deltaTime * 2f;
+			}
+
+			//Disable animator to let bones only be effected by the rigidbodies
+			anm.enabled = false;
+
+		} else {
+		//Disable
+
+			//'Disable' rigidbodies
+			foreach (Rigidbody rb in ragdollRBs) {
+				rb.isKinematic = true;
+			}
+
+			//Enable animator
+			anm.enabled = true;
+
+			//Translate the Guard parent of the rigidbodies to the position of the 'main' bone
+			Vector3 bonePos = ragdollRBs[0].gameObject.transform.position; //We do this because when the rigidbodies are active (not kinematic), the children objects will translate away from the main parent object,
+			this.transform.position = new Vector3 (bonePos.x, this.transform.position.y, bonePos.z); //while the main parent object stays in place. So when we start using the animator again, the rendering mesh will
+			//will seem to teleport back to the parent object, instead of where the rigidbodies appeared to stop on the ground.
+			//That explanation may sound confusing, but you can comment out these lines to see what I'm on about.
 
 		}
 	}
