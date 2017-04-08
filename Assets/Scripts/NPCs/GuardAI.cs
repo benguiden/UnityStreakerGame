@@ -137,11 +137,11 @@ public class GuardAI : MonoBehaviour {
 			////////////////////////////////////////////////
 
 			//Change state 
-			if ((distanceToTarget > faceDistance) || (facingAngle > 45f) || (facingAngle < -45f))
+			if ((distanceToTarget > faceDistance + 10f) || (facingAngle > 90f) || (facingAngle < -90f))
 				state = "chase";
 			
 			//Set Animation state
-			anm.SetInteger ("state", 1);
+			anm.SetInteger ("state", 3);
 
 			break;
 			////////////////////////////////////////////////
