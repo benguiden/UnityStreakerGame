@@ -18,13 +18,15 @@ public class GuardAI : MonoBehaviour {
 	public float diveDistance = 5f;
 	[Tooltip("How long it takes for the character to recover from ragdoll mode.")]
 	public float recoverTime = 2f;
+	[Tooltip("The distance from the target that the controller desides to get in the targets way, instead of moving towards the target.")]
+	public float faceDistance = 35f;
 
 	private float speed, acceleration, recoverCount/*The counter to recover time*/;
 	private string state = "chase"; //This is the state the AI is in and determines how it will act 
 
 	//Objects
 	private CharacterController controller;
-	private Transform target;
+	private Transform target, targetModel; //targetModel is the child object of the target that includes the MeshRenderer (Mermaid Man Model), we want to this see where the model is facing for AI purposes
 	private Animator anm;
 	private Rigidbody[] ragdollRBs;
 
@@ -35,11 +37,15 @@ public class GuardAI : MonoBehaviour {
 		//Objects
 		controller = this.GetComponent<CharacterController>();
 		target = GameObject.FindGameObjectWithTag("Player").transform;
+		targetModel = target.GetComponent<PlayerController> ().characterModel.transform;
 		anm = this.GetComponentInChildren<Animator>();
 		ragdollRBs = this.GetComponentsInChildren<Rigidbody> ();
 	}
 
 	void Update(){
+
+		float distanceToTarget = Vector3.Distance (this.transform.position, target.position);
+		float facingAngle = Geometry.FacingAngle (targetModel.transform, this.transform); //This is the angle between the targets position & FORWARD angle (localEularAngle.y) and this transform
 
 		//State Machine
 		switch (state){
@@ -55,12 +61,15 @@ public class GuardAI : MonoBehaviour {
 			}
 
 			//Chase and Steer towards target
-			Chase(speed);
+			Chase (speed);
 
 			//Change state if close enough to target
-			if (Vector3.Distance (this.transform.position, target.position) <= diveDistance)
+			if (distanceToTarget <= diveDistance)
 				state = "dive";
-			
+			else if ((distanceToTarget <= faceDistance) && ((facingAngle <= 45f) && (facingAngle >= -45f)))
+				state = "face";
+
+
 			//Set Animation state
 			anm.SetInteger("state", 0);
 
@@ -100,7 +109,7 @@ public class GuardAI : MonoBehaviour {
 			break;
 			////////////////////////////////////////////////
 
-		//Ragdolling and falling to the ground, and staying on the ground for a specified ammount of time
+			//Ragdolling and falling to the ground, and staying on the ground for a specified ammount of time
 		case "ragdoll":
 			////////////////////////////////////////////////
 
@@ -119,6 +128,20 @@ public class GuardAI : MonoBehaviour {
 				state = "chase";
 
 			}
+
+			break;
+			////////////////////////////////////////////////
+
+			//During this state, the AI tries to get in the targets way, instead of running straight towards it
+		case "face":
+			////////////////////////////////////////////////
+
+			//Change state 
+			if ((distanceToTarget > faceDistance) || (facingAngle > 45f) || (facingAngle < -45f))
+				state = "chase";
+			
+			//Set Animation state
+			anm.SetInteger ("state", 1);
 
 			break;
 			////////////////////////////////////////////////
