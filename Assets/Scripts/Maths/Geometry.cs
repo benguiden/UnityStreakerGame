@@ -11,6 +11,14 @@ public class Geometry : MonoBehaviour {
 		Vector2 thisPos = new Vector2 (thisTrans.position.x, thisTrans.position.z);
 		Vector2 targetPos = new Vector2 (targetTrans.position.x, targetTrans.position.z);
 		float theta = Mathf.Atan2 (targetPos.y - thisPos.y, targetPos.x - thisPos.x) * Mathf.Rad2Deg;
-		return theta + thisTrans.localEulerAngles.y - 90f;
+		theta = theta + thisTrans.localEulerAngles.y - 90f;
+
+		while (theta > 180f) //This is like modulus but it puts it in the range (-180, 180)
+			theta -= 360f; //We do this because regular modulus does not put the number in the range of a negative number
+		while (theta < -180f)
+			theta += 360f;
+
+		//Returns a float between -180f -> 180f
+		return theta;
 	}
 }

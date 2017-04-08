@@ -18,6 +18,8 @@ public class GuardAI : MonoBehaviour {
 	public float diveDistance = 5f;
 	[Tooltip("How long it takes for the character to recover from ragdoll mode.")]
 	public float recoverTime = 2f;
+	[Tooltip("The speed that the controller steps side to side when facing and in the way of the target.")]
+	public float sideStepSpeed = 4f;
 	[Tooltip("The distance from the target that the controller desides to get in the targets way, instead of moving towards the target.")]
 	public float faceDistance = 35f;
 
@@ -135,6 +137,17 @@ public class GuardAI : MonoBehaviour {
 			//During this state, the AI tries to get in the targets way, instead of running straight towards it
 		case "face":
 			////////////////////////////////////////////////
+
+			//Face target
+			this.transform.LookAt (new Vector3 (target.position.x, this.transform.position.y, target.position.z)); //We use this.transform.position.y so we don't tilt up or down, and stay aligned to the ground
+			//Move in the way of the target
+			if (facingAngle > 10f) {
+				//Move Left
+				controller.SimpleMove (this.transform.right * -sideStepSpeed);
+			} else if (facingAngle < -10f) {
+				//Move Right
+				controller.SimpleMove (this.transform.right * sideStepSpeed);
+			}
 
 			//Change state 
 			if ((distanceToTarget > faceDistance + 10f) || (facingAngle > 90f) || (facingAngle < -90f))
