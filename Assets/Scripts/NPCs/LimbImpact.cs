@@ -23,11 +23,11 @@ public class LimbImpact : MonoBehaviour {
 
 	void OnCollisionEnter(Collision c){
 		if (rb.isKinematic == false) {
-            if (c.relativeVelocity.magnitude >= deltaVelocityMin)
+            if ((c.relativeVelocity.magnitude >= deltaVelocityMin) && !(audioSource.isPlaying))
             {
                 float force = Mathf.Clamp01(c.relativeVelocity.magnitude / (deltaVelocityMax - deltaVelocityMin)); //Returns a force between 0-1 to set the volume of the Audio Source
                 audioSource.clip = NPCAudioClips.GetClip("fumbleClips");
-                audioSource.volume = 0.25f + (0.5f * force);
+                audioSource.volume = 0.2f + (0.5f * force);
                 audioSource.Play();
             }
 		}
