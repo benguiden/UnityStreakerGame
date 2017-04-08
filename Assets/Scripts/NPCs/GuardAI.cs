@@ -144,14 +144,20 @@ public class GuardAI : MonoBehaviour {
 			if (facingAngle > 10f) {
 				//Move Left
 				controller.SimpleMove (this.transform.right * -sideStepSpeed);
+				anm.SetFloat ("playbackSpeed", 1f);
 			} else if (facingAngle < -10f) {
 				//Move Right
 				controller.SimpleMove (this.transform.right * sideStepSpeed);
+				anm.SetFloat ("playbackSpeed", -1f); //So the animation plays in reverse
+			} else {
+				anm.SetFloat ("playbackSpeed", 0f);
 			}
 
 			//Change state 
-			if ((distanceToTarget > faceDistance + 10f) || (facingAngle > 90f) || (facingAngle < -90f))
+			if ((distanceToTarget > faceDistance + 10f) || (facingAngle > 90f) || (facingAngle < -90f)) {
 				state = "chase";
+				anm.SetFloat ("playbackSpeed", 1f);
+			}
 			
 			//Set Animation state
 			anm.SetInteger ("state", 3);
