@@ -55,7 +55,7 @@ public class GuardAI : MonoBehaviour {
 			}
 
 			//Chase and Steer towards target
-			Chase();
+			Chase(speed);
 
 			//Change state if close enough to target
 			if (Vector3.Distance (this.transform.position, target.position) <= diveDistance)
@@ -87,8 +87,11 @@ public class GuardAI : MonoBehaviour {
 					controller.SimpleMove (this.transform.forward * maxSpeed * 1.2f);
 				} else {
 					//Move and rotate controller just like the 'chase' state when normalized time < 0.5f
-					Chase();
+					Chase (maxSpeed);
 				}
+			} else {
+				//The animtor is transitioning to the dice state, but we want the controller to keep moving towards the target
+				Chase (maxSpeed);
 			}
 
 			//Set Animation state
@@ -123,7 +126,7 @@ public class GuardAI : MonoBehaviour {
 		}
 	}
 
-	private void Chase(){
+	private void Chase(float speed){
 		//Chase and Steer towards target
 		Vector3 move = NPC.ChaseForce (this.transform.position, target.position, speed, steeringSpd, controller.velocity * Time.deltaTime);
 			
