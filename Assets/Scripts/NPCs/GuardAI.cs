@@ -31,6 +31,7 @@ public class GuardAI : MonoBehaviour {
 	private Transform target, targetModel; //targetModel is the child object of the target that includes the MeshRenderer (Mermaid Man Model), we want to this see where the model is facing for AI purposes
 	private Animator anm;
 	private Rigidbody[] ragdollRBs;
+	private AudioSource audioSource;
 
 	void Start(){
 		//Variables
@@ -42,10 +43,11 @@ public class GuardAI : MonoBehaviour {
 		targetModel = target.GetComponent<PlayerController> ().characterModel.transform;
 		anm = this.GetComponentInChildren<Animator>();
 		ragdollRBs = this.GetComponentsInChildren<Rigidbody> ();
+		audioSource = this.GetComponent<AudioSource> ();
+		audioSource.pitch = 0.9f + Random.Range (0.0f, 0.2f); //So not every guard appears to have the same 'voice'
 	}
 
 	void Update(){
-
 		float distanceToTarget = Vector3.Distance (this.transform.position, target.position);
 		float facingAngle = Geometry.FacingAngle (targetModel.transform, this.transform); //This is the angle between the targets position & FORWARD angle (localEularAngle.y) and this transform
 
@@ -66,9 +68,10 @@ public class GuardAI : MonoBehaviour {
 			Chase (speed);
 
 			//Change state if close enough to target
-			if (distanceToTarget <= diveDistance)
+			if (distanceToTarget <= diveDistance) {
 				state = "dive";
-			else if ((distanceToTarget <= faceDistance) && ((facingAngle <= 45f) && (facingAngle >= -45f)))
+				audioSource.clip = null;
+			}else if ((distanceToTarget <= faceDistance) && ((facingAngle <= 45f) && (facingAngle >= -45f)))
 				state = "face";
 
 
@@ -96,6 +99,11 @@ public class GuardAI : MonoBehaviour {
 				} else if (anmState.normalizedTime >= 0.5f) {
 					//Move controller forward
 					controller.SimpleMove (this.transform.forward * maxSpeed * 1.2f);
+					//Play Sound
+					if (audioSource.clip == null) {
+						audioSource.clip = NPCAudioClips.GetClip ("guardDiveClips");
+						audioSource.Play ();
+					}
 				} else {
 					//Move and rotate controller just like the 'chase' state when normalized time < 0.5f
 					Chase (maxSpeed);
