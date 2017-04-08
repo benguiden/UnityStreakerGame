@@ -192,15 +192,24 @@ public class GuardAI : MonoBehaviour {
 	private void RagdollSetActive(bool active){
 		if (active) {
 		//Enable
-		
+
+			Transform[] boneTrans = this.GetComponentsInChildren<Transform> (); //Get All transformations from child limbs
+
 			//'Enable' rigidbodies to ragdoll
 			foreach (Rigidbody rb in ragdollRBs) {
 				rb.isKinematic = false;
-				rb.velocity = controller.velocity * Time.deltaTime * 2f;
+				rb.AddForce (controller.velocity, ForceMode.VelocityChange);
 			}
 
 			//Disable animator to let bones only be effected by the rigidbodies
 			anm.enabled = false;
+
+			for (int i = 0; i < boneTrans.Length; i++) {
+				this.GetComponentsInChildren<Transform> () [i] = boneTrans [i]; //Set All transformations from child limbs after disabling the animator
+			}
+
+			//Disable controller so there are not collisions will the capsule
+			controller.enabled = false;
 
 		} else {
 		//Disable
@@ -212,6 +221,9 @@ public class GuardAI : MonoBehaviour {
 
 			//Enable animator
 			anm.enabled = true;
+
+			//Enable collisions will the capsule
+			controller.enabled = true;
 
 			//Translate the Guard parent of the rigidbodies to the position of the 'main' bone
 			Vector3 bonePos = ragdollRBs[0].gameObject.transform.position; //We do this because when the rigidbodies are active (not kinematic), the children objects will translate away from the main parent object,
