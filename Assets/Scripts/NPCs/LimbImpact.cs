@@ -26,7 +26,7 @@ public class LimbImpact : MonoBehaviour {
             if ((c.relativeVelocity.magnitude >= deltaVelocityMin) && !(audioSource.isPlaying))
             {
                 float force = Mathf.Clamp01(c.relativeVelocity.magnitude / (deltaVelocityMax - deltaVelocityMin)); //Returns a force between 0-1 to set the volume of the Audio Source
-                audioSource.clip = NPCAudioClips.GetClip("fumbleClips");
+                audioSource.clip = NPC.GetClip("fumbleClips");
                 audioSource.volume = 0.2f + (0.5f * force);
                 audioSource.Play();
             }
