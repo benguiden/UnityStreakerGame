@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,6 +14,9 @@ public class NPC : MonoBehaviour {
 
     public static List<GameObject> _NPCs = new List<GameObject>();
 
+	[Header("Repelling Force")]
+	public float repellingDistance;
+
     private static AudioClip[] _fumbleClips;
     private static AudioClip[] _guardDiveClips;
 
@@ -28,6 +31,27 @@ public class NPC : MonoBehaviour {
         _NPCs.AddRange(GameObject.FindGameObjectsWithTag("NPC"));
 
     }
+
+	void Update(){
+		
+		/*/Repel other NPCs
+		if (repellingDistance > 0f) {
+			int length = _NPCs.Capacity;
+			for (int i = 0; i < length; i++) {
+				for (int j = length - 1; j > i; j--) {
+					Transform objA = _NPCs [i].transform;
+					Transform objB = _NPCs [j].transform;
+					if (Vector3.Distance (objA.position, objB.position) < repellingDistance) {
+						Vector3 force = Repel (objA.position, objB.position, repellingDistance);
+						objA.Translate (force * Time.deltaTime);
+						objB.Translate (-force * Time.deltaTime);
+					}
+				}
+			}
+		}*/
+
+
+	}
 
     //Returns a random AudioClip from the specified array
     public static AudioClip GetClip(string arrayName)
@@ -50,9 +74,14 @@ public class NPC : MonoBehaviour {
 	}
 
     //Repel Function
-    public static void Repel(GameObject thisObj, Transform repelTrans, float repelSpd){
-        Vector3 difference = new Vector3(repelTrans.position.x - thisObj.transform.position.x, 0f, repelTrans.position.z - thisObj.transform.position.z);
-        thisObj.GetComponent<CharacterController>().SimpleMove(repelSpd * -difference.normalized);
-    }
+	public static Vector3 Repel(Vector3 _a, Vector3 _b, float k){
+		Vector2 a = new Vector2 (_a.x, _a.z); //_a as a vector2 using the X & Z axis, because we don't want to repel the NPCs on the Y-axis
+		Vector2 b = new Vector2 (_b.x, _b.z);//_b as a vector2 using the X & Z axis
+		float mag = Vector2.Distance (a, b);
+		Vector2 dir = (a - b).normalized;
+		Vector2 force = (k / mag) * dir;
+		return new Vector3 (force.x, 0f, force.y); // Return a Vector3 instead of a Vector2 because it's
+												   //easier to add to the CharacterController's velocity
+	}
 
 }

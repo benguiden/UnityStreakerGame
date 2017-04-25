@@ -67,14 +67,6 @@ public class GuardAI : MonoBehaviour {
 			//Chase and Steer towards target
 			Chase (speed);
 
-            //Repel other NPCs
-           /* foreach(GameObject npc in NPC._NPCs){
-                if ((npc != this.gameObject) && (Vector3.Distance(this.transform.position, npc.transform.position) <= 5f)){
-                        Debug.Log("Repel");
-                        NPC.Repel(this.gameObject, npc.transform, 2f);
-                }
-            }*/
-
 			//Change state if close enough to target
 			if (distanceToTarget <= diveDistance) {
 				state = "dive";
@@ -204,6 +196,9 @@ public class GuardAI : MonoBehaviour {
 			
 		//Move controller
 		controller.SimpleMove (move);
+
+		//Reset Y Position to 0
+		//this.transform.position = new Vector3(this.transform.position.x, 0.075f, this.transform.position.z);
 
 		//Rotate Object towards velocity
 		if (controller.velocity.normalized != Vector3.zero) //If the character is no moving, we don't want to set their rotation to snap to (0, 0, 0);
