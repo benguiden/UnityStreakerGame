@@ -45,10 +45,6 @@ public class GuardAI : MonoBehaviour {
 		ragdollRBs = this.GetComponentsInChildren<Rigidbody> ();
 		audioSource = this.GetComponent<AudioSource> ();
 		audioSource.pitch = 0.9f + Random.Range (0.0f, 0.2f); //So not every guard appears to have the same 'voice'
-
-		//Set the controller to trigger TriggerColliders, specifically the player's trigger
-		//controller.isTrigger = true;
-
 	}
 
 	void Update(){

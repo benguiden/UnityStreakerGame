@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour {
 	public float steeringSpd;
 
 	private float speed, acceleration, deacceleration;
+	private bool isRagdoll = false;
 
 	//Objects
 	[Tooltip("The transform with the direction for the controller to run in.")]
@@ -26,6 +27,7 @@ public class PlayerController : MonoBehaviour {
 
 	private CharacterController controller;
 	private Animator anm;
+	private Rigidbody[] ragdollRBs;
 
 	void Start(){
 		//Variables
@@ -35,10 +37,10 @@ public class PlayerController : MonoBehaviour {
 		//Objects
 		controller = this.GetComponent<CharacterController>();
 		anm = this.GetComponentInChildren<Animator> ();
+		ragdollRBs = this.GetComponentsInChildren<Rigidbody> ();
 	}
 
 	void Update(){
-
 		//Move
 		if ((Input.GetAxisRaw ("Vertical") != 0) || (Input.GetAxisRaw ("Horizontal") != 0)) {
 
@@ -70,7 +72,8 @@ public class PlayerController : MonoBehaviour {
 		}
 
 		//Move the character (even when there is no input, so the character can deaccelerate instead of just stopping instantly)
-		controller.SimpleMove (speed * characterModel.transform.forward.normalized);
+		if (isRagdoll == false)
+			controller.SimpleMove (speed * characterModel.transform.forward.normalized);
 
 
 		//Animation
@@ -84,8 +87,58 @@ public class PlayerController : MonoBehaviour {
 	} 
 
 	void OnTriggerEnter(Collider c){
-		if ((c.gameObject.tag == "NPC") || (c.gameObject.tag == "NPCLimb")) {
-			//Ragdoll
+		if (isRagdoll == false) {
+			if ((c.gameObject.tag == "NPC") || (c.gameObject.tag == "NPCLimb")) {
+				//Ragdoll
+				RagdollSetActive (true);
+			}
+		}
+	}
+
+	private void RagdollSetActive(bool active){
+		if (active) {
+			//Enable
+			isRagdoll = true;
+
+			Transform[] boneTrans = this.GetComponentsInChildren<Transform> (); //Get All transformations from child limbs
+
+			//'Enable' rigidbodies to ragdoll
+			foreach (Rigidbody rb in ragdollRBs) {
+				rb.isKinematic = false;
+				rb.AddForce (controller.velocity, ForceMode.VelocityChange);
+				Debug.Log (rb.velocity.magnitude);
+			}
+
+			//Disable animator to let bones only be effected by the rigidbodies
+			anm.enabled = false;
+
+			for (int i = 0; i < boneTrans.Length; i++) {
+				this.GetComponentsInChildren<Transform> () [i] = boneTrans [i]; //Set All transformations from child limbs after disabling the animator
+			}
+
+			//Disable controller so there are not collisions will the capsule
+			controller.enabled = false;
+
+		} else {
+			//Disable
+			isRagdoll = false;
+
+			//'Disable' rigidbodies
+			foreach (Rigidbody rb in ragdollRBs) {
+				rb.isKinematic = true;
+			}
+
+			//Enable animator
+			anm.enabled = true;
+
+			//Enable collisions will the capsule
+			controller.enabled = true;
+
+			//Translate the Player parent of the rigidbodies to the position of the 'main' bone
+			Vector3 bonePos = ragdollRBs[0].gameObject.transform.position; //We do this because when the rigidbodies are active (not kinematic), the children objects will translate away from the main parent object,
+			this.transform.position = new Vector3 (bonePos.x, this.transform.position.y, bonePos.z); //while the main parent object stays in place. So when we start using the animator again, the rendering mesh will
+			//will seem to teleport back to the parent object, instead of where the rigidbodies appeared to stop on the ground.
+			//That explanation may sound confusing, but you can comment out these lines to see what I'm on about.
 
 		}
 	}
