@@ -81,6 +81,13 @@ public class PlayerController : MonoBehaviour {
 		if (nextState.IsName ("Run"))
 			anm.speed = 0.5f + (speed / (2f * maxSpeed));
 
+	} 
+
+	void OnTriggerEnter(Collider c){
+		if ((c.gameObject.tag == "NPC") || (c.gameObject.tag == "NPCLimb")) {
+			//Ragdoll
+
+		}
 	}
 		
 }
