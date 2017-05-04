@@ -28,7 +28,8 @@ public class GuardAI : MonoBehaviour {
 
 	//Objects
 	private CharacterController controller;
-	private Transform target, targetModel; //targetModel is the child object of the target that includes the MeshRenderer (Mermaid Man Model), we want to this see where the model is facing for AI purposes
+	public Transform target;
+	private Transform targetModel; //targetModel is the child object of the target that includes the MeshRenderer (Mermaid Man Model), we want to this see where the model is facing for AI purposes
 	private Animator anm;
 	private Rigidbody[] ragdollRBs;
 	private AudioSource audioSource;
@@ -68,12 +69,22 @@ public class GuardAI : MonoBehaviour {
 			Chase (speed);
 
 			//Change state if close enough to target
-			if (distanceToTarget <= diveDistance) {
-				state = "dive";
-				audioSource.clip = null;
-			}else if ((distanceToTarget <= faceDistance) && ((facingAngle <= 45f) && (facingAngle >= -45f)))
-				state = "face";
+			if (NPC.playerCaught == false) {
+				if (distanceToTarget <= diveDistance) {
+					state = "dive";
+					audioSource.clip = null;
+				} else if ((distanceToTarget <= faceDistance) && ((facingAngle <= 45f) && (facingAngle >= -45f)))
+					state = "face";
+			} else {
+				if (distanceToTarget <= diveDistance) {
+					//Change state to ragdoll
+					state = "ragdoll";
+					recoverCount = -1f;
 
+					//Enable Ragdoll
+					RagdollSetActive (true);
+				}
+			}
 
 			//Set Animation state
 			anm.SetInteger("state", 0);
@@ -127,12 +138,12 @@ public class GuardAI : MonoBehaviour {
 			anm.SetInteger ("state", 2);
 
 			//Count down recover time
-			if (recoverCount > 0f) {
+			if ((recoverCount > 0f) && (NPC.playerCaught == false)) {
 				recoverCount -= Time.deltaTime;
 			}
 
 			//Check if recovered
-			if ((recoverCount <= 0f) && (recoverCount > 1f)) {
+			if ((recoverCount <= 0f) && (recoverCount > -1f)) {
 				//Deactivee the ragdolls
 				RagdollSetActive(false);
 

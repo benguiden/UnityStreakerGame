@@ -107,14 +107,19 @@ public class PlayerController : MonoBehaviour {
 				//Ragdoll
 				RagdollSetActive (true);
 				c.gameObject.GetComponent<GuardAI> ().HitPlayer ();
+				NPC.PlayerCaught ();
 			} else if (c.gameObject.tag == "NPCLimb") {
 				//Ragdoll
 				RagdollSetActive (true);
 				Transform limb = c.gameObject.transform;
+
+				//Find parent guard object of the limb
 				while (limb.parent.tag != "NPC") {
 					limb = limb.parent;
 				}
 				limb.parent.gameObject.GetComponent<GuardAI> ().HitPlayer ();
+
+				NPC.PlayerCaught ();
 			}
 		}
 	}

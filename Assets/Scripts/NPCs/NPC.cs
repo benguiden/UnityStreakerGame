@@ -14,6 +14,8 @@ public class NPC : MonoBehaviour {
 
     public static List<GameObject> _NPCs = new List<GameObject>();
 
+	public static bool playerCaught = false;
+
 	[Header("Repelling Force")]
 	public float repellingDistance;
 
@@ -51,6 +53,17 @@ public class NPC : MonoBehaviour {
 		}*/
 
 
+	}
+
+	public static void PlayerCaught(){
+		playerCaught = true;
+
+		//Change AI target to the player's mech
+		Transform newTarget = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().ragdollBody;
+		foreach (GameObject guard in _NPCs) {
+			GuardAI ai = guard.GetComponent<GuardAI> ();
+			ai.target = newTarget;
+		}
 	}
 
     //Returns a random AudioClip from the specified array
