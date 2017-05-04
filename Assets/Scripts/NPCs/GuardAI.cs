@@ -32,6 +32,7 @@ public class GuardAI : MonoBehaviour {
 	private Transform targetModel; //targetModel is the child object of the target that includes the MeshRenderer (Mermaid Man Model), we want to this see where the model is facing for AI purposes
 	private Animator anm;
 	private Rigidbody[] ragdollRBs;
+	private Collider[] ragdollColliders;
 	private AudioSource audioSource;
 
 	void Start(){
@@ -44,8 +45,15 @@ public class GuardAI : MonoBehaviour {
 		targetModel = target.GetComponent<PlayerController> ().characterModel.transform;
 		anm = this.GetComponentInChildren<Animator>();
 		ragdollRBs = this.GetComponentsInChildren<Rigidbody> ();
+		ragdollColliders = this.GetComponentsInChildren<Collider> ();
 		audioSource = this.GetComponent<AudioSource> ();
 		audioSource.pitch = 0.9f + Random.Range (0.0f, 0.2f); //So not every guard appears to have the same 'voice'
+
+		//Ignore triggering with the limbs of the character
+		for (int i=0; i<ragdollRBs.Length; i++){
+			Physics.IgnoreCollision (ragdollRBs [i].gameObject.GetComponent<Collider> (), this.GetComponent<CharacterController> ());
+		}
+
 	}
 
 	void Update(){
@@ -175,7 +183,7 @@ public class GuardAI : MonoBehaviour {
 			}
 
 			//Change state 
-			if ((distanceToTarget > faceDistance + 10f) || (facingAngle > 90f) || (facingAngle < -90f)) {
+			if ((distanceToTarget > faceDistance + 10f) || (facingAngle > 90f) || (facingAngle < -90f) || (NPC.playerCaught == true)){
 				state = "chase";
 				anm.SetFloat ("playbackSpeed", 1f);
 			}
@@ -197,6 +205,26 @@ public class GuardAI : MonoBehaviour {
         //Enable Ragdoll
         RagdollSetActive(true);
     }
+
+	//Check if guard collides with ragdolled guard or ragdolled player
+	void OnControllerColliderHit(ControllerColliderHit hit){
+		if ((state != "ragdoll") && (speed >= maxSpeed)) {
+			if (hit.gameObject.tag == "NPCLimb"){
+				Transform limb = hit.gameObject.transform;
+				//Find parent guard object of the limb
+				while (limb.parent.tag != "NPC") {
+					limb = limb.parent;
+				}
+				if (limb.parent.gameObject.GetComponent<GuardAI> ().state == "ragdoll") {
+					//Change state to ragdoll
+					state = "ragdoll";
+					recoverCount = recoverTime;
+					//Enable Ragdoll
+					RagdollSetActive (true);
+				}
+			}
+		}
+	}
 
     private void Chase(float speed){
 		//Chase and Steer towards target
@@ -225,6 +253,9 @@ public class GuardAI : MonoBehaviour {
 				rb.isKinematic = false;
 				rb.AddForce (controller.velocity, ForceMode.VelocityChange);
 			}
+			foreach (Collider c in ragdollColliders) {
+				c.enabled = true;
+			}
 
 			//Disable animator to let bones only be effected by the rigidbodies
 			anm.enabled = false;
@@ -236,12 +267,18 @@ public class GuardAI : MonoBehaviour {
 			//Disable controller so there are not collisions will the capsule
 			controller.enabled = false;
 
+			//Crowd intensify
+			CrowdControl.intensity += 0.1f;
+
 		} else {
 		//Disable
 
 			//'Disable' rigidbodies
 			foreach (Rigidbody rb in ragdollRBs) {
 				rb.isKinematic = true;
+			}
+			foreach (Collider c in ragdollColliders) {
+				c.enabled = false;
 			}
 
 			//Enable animator

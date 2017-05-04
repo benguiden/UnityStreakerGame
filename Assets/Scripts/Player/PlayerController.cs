@@ -155,6 +155,9 @@ public class PlayerController : MonoBehaviour {
 			tVCamera.enabled = true;
 			tVCamera.gameObject.GetComponent<AudioListener> ().enabled = true;
 
+			//Crowd intensify
+			CrowdControl.intensity += 0.5f;
+
 		} else {
 			//Disable
 			isRagdoll = false;
