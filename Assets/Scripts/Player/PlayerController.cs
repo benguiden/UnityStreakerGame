@@ -148,6 +148,7 @@ public class PlayerController : MonoBehaviour {
 			//Change camera to TV camera
 			cam.gameObject.SetActive (false);
 			tVCamera.enabled = true;
+			tVCamera.gameObject.GetComponent<AudioListener> ().enabled = true;
 
 		} else {
 			//Disable
