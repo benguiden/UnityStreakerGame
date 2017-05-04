@@ -24,10 +24,15 @@ public class PlayerController : MonoBehaviour {
 	public Transform cam;
 	[Tooltip("The character model to rotate and animate.")]
 	public GameObject characterModel;
+	[Tooltip("The transform that childs all other bones of the model that ragdoll.")]
+	public Transform ragdollBody;
+	[Tooltip("The TV Camera.")]
+	public Camera tVCamera;
 
 	private CharacterController controller;
 	private Animator anm;
 	private Rigidbody[] ragdollRBs;
+	private Collider[] ragdollColliders;
 
 	void Start(){
 		//Variables
@@ -38,59 +43,78 @@ public class PlayerController : MonoBehaviour {
 		controller = this.GetComponent<CharacterController>();
 		anm = this.GetComponentInChildren<Animator> ();
 		ragdollRBs = this.GetComponentsInChildren<Rigidbody> ();
+		ragdollColliders = this.GetComponentsInChildren<Collider> ();
+
+		//Ignore triggering with the limbs of the character
+		for (int i=0; i<ragdollRBs.Length; i++){
+			Physics.IgnoreCollision (ragdollRBs [i].gameObject.GetComponent<Collider> (), this.GetComponent<CapsuleCollider> ());
+		}
+
 	}
 
 	void Update(){
-		//Move
-		if ((Input.GetAxisRaw ("Vertical") != 0) || (Input.GetAxisRaw ("Horizontal") != 0)) {
+		
+		if (isRagdoll == false) {
+			//Move
+			if ((Input.GetAxisRaw ("Vertical") != 0) || (Input.GetAxisRaw ("Horizontal") != 0)) {
 
-			//Set Speed
-			if (speed < maxSpeed){
-				speed += acceleration * Time.deltaTime; //Accelerate
-			}else if (speed > maxSpeed) {
-				speed = maxSpeed; //Stop Accelerating
+				//Set Speed
+				if (speed < maxSpeed){
+					speed += acceleration * Time.deltaTime; //Accelerate
+				}else if (speed > maxSpeed) {
+					speed = maxSpeed; //Stop Accelerating
+				}
+					
+				//Takes the input and read it as an angle
+				float inDir = Mathf.Atan(Input.GetAxisRaw ("Horizontal") / Input.GetAxisRaw ("Vertical")) * (180f / Mathf.PI);
+				if (Input.GetAxisRaw ("Vertical") < 0f){
+					inDir += 180f; //Requirement when using the Atan function
+				}
+
+				//Steer the character to the desired direction using steeringSpd, inputDirection and the camera direction
+				Vector3 modelAngle = characterModel.transform.localEulerAngles;
+				float yAngleShift = Mathf.LerpAngle (modelAngle.y, cam.transform.localEulerAngles.y + inDir, steeringSpd);
+				characterModel.transform.localEulerAngles = new Vector3 (modelAngle.x, yAngleShift, modelAngle.z);
+
+			} else {
+				//Slow down to stop
+				if (speed > 0f) {
+					speed -= deacceleration * Time.deltaTime;
+				} else if (speed < 0f) {
+					speed = 0f;
+				}
 			}
-				
-			//Takes the input and read it as an angle
-			float inDir = Mathf.Atan(Input.GetAxisRaw ("Horizontal") / Input.GetAxisRaw ("Vertical")) * (180f / Mathf.PI);
-			if (Input.GetAxisRaw ("Vertical") < 0f){
-				inDir += 180f; //Requirement when using the Atan function
-			}
 
-			//Steer the character to the desired direction using steeringSpd, inputDirection and the camera direction
-			Vector3 modelAngle = characterModel.transform.localEulerAngles;
-			float yAngleShift = Mathf.LerpAngle (modelAngle.y, cam.transform.localEulerAngles.y + inDir, steeringSpd);
-			characterModel.transform.localEulerAngles = new Vector3 (modelAngle.x, yAngleShift, modelAngle.z);
+			//Move the character (even when there is no input, so the character can deaccelerate instead of just stopping instantly)
 
-		} else {
-			//Slow down to stop
-			if (speed > 0f) {
-				speed -= deacceleration * Time.deltaTime;
-			} else if (speed < 0f) {
-				speed = 0f;
-			}
-		}
-
-		//Move the character (even when there is no input, so the character can deaccelerate instead of just stopping instantly)
-		if (isRagdoll == false)
 			controller.SimpleMove (speed * characterModel.transform.forward.normalized);
 
+			//Animation
+			anm.SetFloat("speed", speed);
 
-		//Animation
-		anm.SetFloat("speed", speed);
-
-		//Set Speed of running animation
-		AnimatorStateInfo nextState = anm.GetNextAnimatorStateInfo(0);
-		if (nextState.IsName ("Run"))
-			anm.speed = 0.5f + (speed / (2f * maxSpeed));
+			//Set Speed of running animation
+			AnimatorStateInfo nextState = anm.GetNextAnimatorStateInfo(0);
+			if (nextState.IsName ("Run"))
+				anm.speed = 0.5f + (speed / (2f * maxSpeed));
+			
+		}
 
 	} 
 
 	void OnTriggerEnter(Collider c){
 		if (isRagdoll == false) {
-			if ((c.gameObject.tag == "NPC") || (c.gameObject.tag == "NPCLimb")) {
+			if (c.gameObject.tag == "NPC") {
 				//Ragdoll
 				RagdollSetActive (true);
+				c.gameObject.GetComponent<GuardAI> ().HitPlayer ();
+			} else if (c.gameObject.tag == "NPCLimb") {
+				//Ragdoll
+				RagdollSetActive (true);
+				Transform limb = c.gameObject.transform;
+				while (limb.parent.tag != "NPC") {
+					limb = limb.parent;
+				}
+				limb.parent.gameObject.GetComponent<GuardAI> ().HitPlayer ();
 			}
 		}
 	}
@@ -106,7 +130,9 @@ public class PlayerController : MonoBehaviour {
 			foreach (Rigidbody rb in ragdollRBs) {
 				rb.isKinematic = false;
 				rb.AddForce (controller.velocity, ForceMode.VelocityChange);
-				Debug.Log (rb.velocity.magnitude);
+			}
+			foreach (Collider c in ragdollColliders) {
+				c.enabled = true;
 			}
 
 			//Disable animator to let bones only be effected by the rigidbodies
@@ -119,6 +145,10 @@ public class PlayerController : MonoBehaviour {
 			//Disable controller so there are not collisions will the capsule
 			controller.enabled = false;
 
+			//Change camera to TV camera
+			cam.gameObject.SetActive (false);
+			tVCamera.enabled = true;
+
 		} else {
 			//Disable
 			isRagdoll = false;
@@ -126,6 +156,9 @@ public class PlayerController : MonoBehaviour {
 			//'Disable' rigidbodies
 			foreach (Rigidbody rb in ragdollRBs) {
 				rb.isKinematic = true;
+			}
+			foreach (Collider c in ragdollColliders) {
+				c.enabled = false;
 			}
 
 			//Enable animator

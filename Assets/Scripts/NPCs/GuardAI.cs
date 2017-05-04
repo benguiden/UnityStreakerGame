@@ -127,10 +127,12 @@ public class GuardAI : MonoBehaviour {
 			anm.SetInteger ("state", 2);
 
 			//Count down recover time
-			recoverCount -= Time.deltaTime;
+			if (recoverCount > 0f) {
+				recoverCount -= Time.deltaTime;
+			}
 
 			//Check if recovered
-			if (recoverCount <= 0f) {
+			if ((recoverCount <= 0f) && (recoverCount > 1f)) {
 				//Deactivee the ragdolls
 				RagdollSetActive(false);
 
@@ -175,20 +177,15 @@ public class GuardAI : MonoBehaviour {
 
 		}
 	}
-
-    //Change in the future!!!!
-    ///////////////////////////
-    private void OnControllerColliderHit(ControllerColliderHit hit){
-        //Check if the controller hits the player and ragdolls
-        if (hit.collider.gameObject.tag == "Player"){
-            //Change state to ragdoll
-            state = "ragdoll";
-            recoverCount = recoverTime;
-            //Enable Ragdoll
-            RagdollSetActive(true);
-        }
+		
+	//Call when the player collides with the Guard
+	public void HitPlayer(){
+        //Change state to ragdoll
+        state = "ragdoll";
+        recoverCount = -1f;
+        //Enable Ragdoll
+        RagdollSetActive(true);
     }
-    ////////////////////////
 
     private void Chase(float speed){
 		//Chase and Steer towards target
