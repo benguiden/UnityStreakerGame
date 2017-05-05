@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour {
 	[Range(0f, 1f)]
 	[Tooltip("How fast the controller is at changing it's direction when running.")]
 	public float steeringSpd;
+	[Tooltip("The amount of force the controller imposes on other rigidbodies.")]
+	public float force = 10.0f;
 
 	private float speed, acceleration, deacceleration;
 	private bool isRagdoll = false;
@@ -185,4 +187,20 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 		
+	//Collide with other rigidbody objects like balls to add force to them, since the characterController doesn't do that by default
+	//A similar example can be found at https://docs.unity3d.com/ScriptReference/CharacterController.OnControllerColliderHit.html
+	void OnControllerColliderHit(ControllerColliderHit hit){
+		Rigidbody otherRB = hit.collider.attachedRigidbody;
+
+		if (otherRB == null || otherRB.isKinematic)
+			return;
+
+		if (hit.moveDirection.y < -0.3F)
+			return;
+
+		Vector3 pushDir = new Vector3(hit.moveDirection.x, 0.25f, hit.moveDirection.z);
+		otherRB.AddForce ((pushDir * force)/otherRB.mass, ForceMode.VelocityChange);
+	}
+
+
 }

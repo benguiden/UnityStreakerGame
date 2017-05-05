@@ -34,6 +34,7 @@ public class GuardAI : MonoBehaviour {
 	private Rigidbody[] ragdollRBs;
 	private Collider[] ragdollColliders;
 	private AudioSource audioSource;
+	private CapsuleCollider capCollider;
 
 	void Start(){
 		//Variables
@@ -46,6 +47,7 @@ public class GuardAI : MonoBehaviour {
 		anm = this.GetComponentInChildren<Animator>();
 		ragdollRBs = this.GetComponentsInChildren<Rigidbody> ();
 		ragdollColliders = this.GetComponentsInChildren<Collider> ();
+		capCollider = this.GetComponent<CapsuleCollider> ();
 		audioSource = this.GetComponent<AudioSource> ();
 		audioSource.pitch = 0.9f + Random.Range (0.0f, 0.2f); //So not every guard appears to have the same 'voice'
 
@@ -81,8 +83,10 @@ public class GuardAI : MonoBehaviour {
 				if (distanceToTarget <= diveDistance) {
 					state = "dive";
 					audioSource.clip = null;
-				} else if ((distanceToTarget <= faceDistance) && ((facingAngle <= 45f) && (facingAngle >= -45f)))
+				} else if ((distanceToTarget <= faceDistance) && ((facingAngle <= 45f) && (facingAngle >= -45f))) {
 					state = "face";
+					capCollider.enabled = true;
+				}
 			} else {
 				if (distanceToTarget <= diveDistance) {
 					//Change state to ragdoll
@@ -185,6 +189,7 @@ public class GuardAI : MonoBehaviour {
 			//Change state 
 			if ((distanceToTarget > faceDistance + 10f) || (facingAngle > 90f) || (facingAngle < -90f) || (NPC.playerCaught == true)){
 				state = "chase";
+				capCollider.enabled = false;
 				anm.SetFloat ("playbackSpeed", 1f);
 			}
 			
@@ -223,6 +228,25 @@ public class GuardAI : MonoBehaviour {
 					RagdollSetActive (true);
 				}
 			}
+		}
+
+		if (hit.gameObject.tag == "MovingObject") {
+			//Change state to ragdoll
+			state = "ragdoll";
+			recoverCount = recoverTime;
+			//Enable Ragdoll
+			RagdollSetActive (true);
+		}
+
+	}
+
+	void OnTriggerEnter(Collider c){
+		if (c.gameObject.tag == "MovingObject") {
+			//Change state to ragdoll
+			state = "ragdoll";
+			recoverCount = recoverTime;
+			//Enable Ragdoll
+			RagdollSetActive (true);
 		}
 	}
 
