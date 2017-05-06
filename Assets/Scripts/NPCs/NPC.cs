@@ -29,6 +29,10 @@ public class NPC : MonoBehaviour {
         _fumbleClips = fumbleClips;
         _guardDiveClips = guardDiveClips;
 
+		//Empty NPC List if scene has been reloaded, due to the list being static,
+		//and the gameObjects in that list would of been destroyed
+		_NPCs.Clear();
+
         //Get all NPC Game Objects
         _NPCs.AddRange(GameObject.FindGameObjectsWithTag("NPC"));
 

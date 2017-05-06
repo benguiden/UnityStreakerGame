@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof (CharacterController))]
 public class PlayerController : MonoBehaviour {
@@ -55,7 +56,11 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Update(){
-		
+
+		if (Input.GetKeyDown(KeyCode.Escape)){
+			SceneManager.LoadScene (0);
+		}
+
 		if (isRagdoll == false) {
 			//Move
 			if ((Input.GetAxisRaw ("Vertical") != 0) || (Input.GetAxisRaw ("Horizontal") != 0)) {
