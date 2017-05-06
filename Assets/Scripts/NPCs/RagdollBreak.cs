@@ -18,8 +18,8 @@ public class RagdollBreak : MonoBehaviour {
 			while (limb.parent.tag != "NPC") {
 				limb = limb.parent;
 			}
-			Debug.Log ("Destroyed " + limb.parent.gameObject.name + " game object due to ragdoll stretching.");
-			Destroy (limb.parent.gameObject);
+			Debug.Log ("Disabled " + limb.parent.gameObject.name + " game object due to ragdoll stretching.");
+			limb.parent.gameObject.SetActive (false);
 		}
 	}
 

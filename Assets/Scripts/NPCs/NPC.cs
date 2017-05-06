@@ -11,6 +11,7 @@ public class NPC : MonoBehaviour {
     //This class with static variables and functions will store that information
     public AudioClip[] fumbleClips;
     public AudioClip[] guardDiveClips;
+	public AudioClip[] footstepClips;
 
     public static List<GameObject> _NPCs = new List<GameObject>();
 
@@ -21,6 +22,7 @@ public class NPC : MonoBehaviour {
 
     private static AudioClip[] _fumbleClips;
     private static AudioClip[] _guardDiveClips;
+	private static AudioClip[] _footstepClips;
 
     void Start()
     {
@@ -28,6 +30,7 @@ public class NPC : MonoBehaviour {
         //This way we can set up the arrays in the inspector
         _fumbleClips = fumbleClips;
         _guardDiveClips = guardDiveClips;
+		_footstepClips = footstepClips;
 
 		//Empty NPC List if scene has been reloaded, due to the list being static,
 		//and the gameObjects in that list would of been destroyed
@@ -79,6 +82,8 @@ public class NPC : MonoBehaviour {
                 return _fumbleClips[Random.Range(0, _fumbleClips.Length - 1)]; //We don't need 'break;' command because once return is called, the process on this function is destroyed
             case "guardDiveClips":
                 return _guardDiveClips[Random.Range(0, _guardDiveClips.Length - 1)];
+			case "footstepClips":
+				return _footstepClips[Random.Range(0, _footstepClips.Length - 1)];
         }
         return null;
     }
