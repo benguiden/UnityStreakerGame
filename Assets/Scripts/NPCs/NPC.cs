@@ -32,6 +32,9 @@ public class NPC : MonoBehaviour {
         _guardDiveClips = guardDiveClips;
 		_footstepClips = footstepClips;
 
+		//Set to false at the start of each scene because variable is static
+		playerCaught = false;
+
 		//Empty NPC List if scene has been reloaded, due to the list being static,
 		//and the gameObjects in that list would of been destroyed
 		_NPCs.Clear();
