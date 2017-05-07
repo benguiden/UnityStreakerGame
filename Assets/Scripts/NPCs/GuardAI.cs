@@ -214,7 +214,7 @@ public class GuardAI : MonoBehaviour {
 	//Check if guard collides with ragdolled guard or ragdolled player
 	void OnControllerColliderHit(ControllerColliderHit hit){
 		if ((state != "ragdoll") && (speed >= maxSpeed)) {
-			if (hit.gameObject.tag == "NPCLimb"){
+			if (hit.gameObject.tag == "NPCLimb") {
 				Transform limb = hit.gameObject.transform;
 				//Find parent guard object of the limb
 				while (limb.parent.tag != "NPC") {
@@ -226,6 +226,18 @@ public class GuardAI : MonoBehaviour {
 					recoverCount = recoverTime;
 					//Enable Ragdoll
 					RagdollSetActive (true);
+				}
+			} else if (hit.gameObject.tag == "Obstacle") {
+				//Change state to ragdoll
+				state = "ragdoll";
+				recoverCount = recoverTime;
+				//Enable Ragdoll
+				RagdollSetActive (true);
+				//Play Sound
+				AudioSource soundFX = hit.gameObject.GetComponent<AudioSource> ();
+				if (soundFX != null) {
+					soundFX.time = 0f;
+					soundFX.Play ();
 				}
 			}
 		}
@@ -241,12 +253,14 @@ public class GuardAI : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider c){
-		if (c.gameObject.tag == "MovingObject") {
-			//Change state to ragdoll
-			state = "ragdoll";
-			recoverCount = recoverTime;
-			//Enable Ragdoll
-			RagdollSetActive (true);
+		if (state != "ragdoll") {
+			if (c.gameObject.tag == "MovingObject") {
+				//Change state to ragdoll
+				state = "ragdoll";
+				recoverCount = recoverTime;
+				//Enable Ragdoll
+				RagdollSetActive (true);
+			}
 		}
 	}
 
@@ -290,6 +304,7 @@ public class GuardAI : MonoBehaviour {
 
 			//Disable controller so there are not collisions will the capsule
 			controller.enabled = false;
+			capCollider.enabled = false;
 
 			//Crowd intensify
 			CrowdControl.intensity += 0.1f;
@@ -310,6 +325,7 @@ public class GuardAI : MonoBehaviour {
 
 			//Enable collisions will the capsule
 			controller.enabled = true;
+			capCollider.enabled = true;
 
 			//Translate the Guard parent of the rigidbodies to the position of the 'main' bone
 			Vector3 bonePos = ragdollRBs[0].gameObject.transform.position; //We do this because when the rigidbodies are active (not kinematic), the children objects will translate away from the main parent object,

@@ -195,16 +195,28 @@ public class PlayerController : MonoBehaviour {
 	//Collide with other rigidbody objects like balls to add force to them, since the characterController doesn't do that by default
 	//A similar example can be found at https://docs.unity3d.com/ScriptReference/CharacterController.OnControllerColliderHit.html
 	void OnControllerColliderHit(ControllerColliderHit hit){
-		Rigidbody otherRB = hit.collider.attachedRigidbody;
+		if (hit.gameObject.tag == "Obstacle") {
+			//Ragdoll
+			RagdollSetActive (true);
+			NPC.PlayerCaught ();
+			//Play Sound
+			AudioSource soundFX = hit.gameObject.GetComponent<AudioSource> ();
+			if (soundFX != null) {
+				soundFX.time = 0f;
+				soundFX.Play ();
+			}
+		} else {
+			Rigidbody otherRB = hit.collider.attachedRigidbody;
 
-		if (otherRB == null || otherRB.isKinematic)
-			return;
+			if (otherRB == null || otherRB.isKinematic)
+				return;
 
-		if (hit.moveDirection.y < -0.3F)
-			return;
+			if (hit.moveDirection.y < -0.3F)
+				return;
 
-		Vector3 pushDir = new Vector3(hit.moveDirection.x, 0.25f, hit.moveDirection.z);
-		otherRB.AddForce ((pushDir * force)/otherRB.mass, ForceMode.VelocityChange);
+			Vector3 pushDir = new Vector3 (hit.moveDirection.x, 0.25f, hit.moveDirection.z);
+			otherRB.AddForce ((pushDir * force) / otherRB.mass, ForceMode.VelocityChange);
+		}
 	}
 
 

@@ -43,7 +43,7 @@ public class Score : MonoBehaviour {
 			
 		difficultyTime -= Time.deltaTime;
 
-		Debug.Log ("Score: " + score.ToString () + " Difficulty: " + difficulty.ToString());
+		//Debug.Log ("Score: " + score.ToString () + " Difficulty: " + difficulty.ToString());
 
 	}
 
