@@ -1,0 +1,432 @@
+fileFormatVersion: 2
+guid: 4eccd42526a3543419ee536143a07c65
+timeCreated: 1494177682
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: chest
+    100002: //RootNode
+    100004: DonArmature
+    100006: foot.L
+    100008: foot.R
+    100010: forearm.L
+    100012: forearm.L_end
+    100014: forearm.R
+    100016: forearm.R_end
+    100018: head
+    100020: head_end
+    100022: heel.02.L
+    100024: heel.02.L_end
+    100026: heel.02.R
+    100028: heel.02.R_end
+    100030: heel.L
+    100032: heel.R
+    100034: hips
+    100036: mesh_Don
+    100038: neck
+    100040: shin.L
+    100042: shin.R
+    100044: shoulder.L
+    100046: shoulder.R
+    100048: spine
+    100050: thigh.L
+    100052: thigh.R
+    100054: toe.L
+    100056: toe.L_end
+    100058: toe.R
+    100060: toe.R_end
+    100062: upper_arm.L
+    100064: upper_arm.R
+    400000: chest
+    400002: //RootNode
+    400004: DonArmature
+    400006: foot.L
+    400008: foot.R
+    400010: forearm.L
+    400012: forearm.L_end
+    400014: forearm.R
+    400016: forearm.R_end
+    400018: head
+    400020: head_end
+    400022: heel.02.L
+    400024: heel.02.L_end
+    400026: heel.02.R
+    400028: heel.02.R_end
+    400030: heel.L
+    400032: heel.R
+    400034: hips
+    400036: mesh_Don
+    400038: neck
+    400040: shin.L
+    400042: shin.R
+    400044: shoulder.L
+    400046: shoulder.R
+    400048: spine
+    400050: thigh.L
+    400052: thigh.R
+    400054: toe.L
+    400056: toe.L_end
+    400058: toe.R
+    400060: toe.R_end
+    400062: upper_arm.L
+    400064: upper_arm.R
+    4300000: mesh_Don
+    7400000: Don|Dive
+    7400002: Don|Face
+    7400004: DonArmature|Idle
+    7400006: DonArmature|Run
+    7400008: Don|Run
+    7400010: DonArmature|T-Pose
+    9500000: //RootNode
+    13700000: mesh_Don
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Don|Dive
+      takeName: DonArmature|Dive
+      firstFrame: 0
+      lastFrame: 50
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: DonArmature
+        weight: 1
+      - path: DonArmature/hips
+        weight: 1
+      - path: DonArmature/hips/spine
+        weight: 1
+      - path: DonArmature/hips/spine/chest
+        weight: 1
+      - path: DonArmature/hips/spine/chest/neck
+        weight: 1
+      - path: DonArmature/hips/spine/chest/neck/head
+        weight: 1
+      - path: DonArmature/hips/spine/chest/neck/head/head_end
+        weight: 1
+      - path: DonArmature/hips/spine/chest/shoulder.L
+        weight: 1
+      - path: DonArmature/hips/spine/chest/shoulder.L/upper_arm.L
+        weight: 1
+      - path: DonArmature/hips/spine/chest/shoulder.L/upper_arm.L/forearm.L
+        weight: 1
+      - path: DonArmature/hips/spine/chest/shoulder.L/upper_arm.L/forearm.L/forearm.L_end
+        weight: 1
+      - path: DonArmature/hips/spine/chest/shoulder.R
+        weight: 1
+      - path: DonArmature/hips/spine/chest/shoulder.R/upper_arm.R
+        weight: 1
+      - path: DonArmature/hips/spine/chest/shoulder.R/upper_arm.R/forearm.R
+        weight: 1
+      - path: DonArmature/hips/spine/chest/shoulder.R/upper_arm.R/forearm.R/forearm.R_end
+        weight: 1
+      - path: DonArmature/hips/thigh.L
+        weight: 1
+      - path: DonArmature/hips/thigh.L/shin.L
+        weight: 1
+      - path: DonArmature/hips/thigh.L/shin.L/foot.L
+        weight: 1
+      - path: DonArmature/hips/thigh.L/shin.L/foot.L/toe.L
+        weight: 1
+      - path: DonArmature/hips/thigh.L/shin.L/foot.L/toe.L/toe.L_end
+        weight: 1
+      - path: DonArmature/hips/thigh.L/shin.L/heel.L
+        weight: 1
+      - path: DonArmature/hips/thigh.L/shin.L/heel.L/heel.02.L
+        weight: 1
+      - path: DonArmature/hips/thigh.L/shin.L/heel.L/heel.02.L/heel.02.L_end
+        weight: 1
+      - path: DonArmature/hips/thigh.R
+        weight: 1
+      - path: DonArmature/hips/thigh.R/shin.R
+        weight: 1
+      - path: DonArmature/hips/thigh.R/shin.R/foot.R
+        weight: 1
+      - path: DonArmature/hips/thigh.R/shin.R/foot.R/toe.R
+        weight: 1
+      - path: DonArmature/hips/thigh.R/shin.R/foot.R/toe.R/toe.R_end
+        weight: 1
+      - path: DonArmature/hips/thigh.R/shin.R/heel.R
+        weight: 1
+      - path: DonArmature/hips/thigh.R/shin.R/heel.R/heel.02.R
+        weight: 1
+      - path: DonArmature/hips/thigh.R/shin.R/heel.R/heel.02.R/heel.02.R_end
+        weight: 1
+      - path: mesh_Don
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Don|Face
+      takeName: DonArmature|Face
+      firstFrame: 0
+      lastFrame: 32
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: DonArmature
+        weight: 1
+      - path: DonArmature/hips
+        weight: 1
+      - path: DonArmature/hips/spine
+        weight: 1
+      - path: DonArmature/hips/spine/chest
+        weight: 1
+      - path: DonArmature/hips/spine/chest/neck
+        weight: 1
+      - path: DonArmature/hips/spine/chest/neck/head
+        weight: 1
+      - path: DonArmature/hips/spine/chest/neck/head/head_end
+        weight: 1
+      - path: DonArmature/hips/spine/chest/shoulder.L
+        weight: 1
+      - path: DonArmature/hips/spine/chest/shoulder.L/upper_arm.L
+        weight: 1
+      - path: DonArmature/hips/spine/chest/shoulder.L/upper_arm.L/forearm.L
+        weight: 1
+      - path: DonArmature/hips/spine/chest/shoulder.L/upper_arm.L/forearm.L/forearm.L_end
+        weight: 1
+      - path: DonArmature/hips/spine/chest/shoulder.R
+        weight: 1
+      - path: DonArmature/hips/spine/chest/shoulder.R/upper_arm.R
+        weight: 1
+      - path: DonArmature/hips/spine/chest/shoulder.R/upper_arm.R/forearm.R
+        weight: 1
+      - path: DonArmature/hips/spine/chest/shoulder.R/upper_arm.R/forearm.R/forearm.R_end
+        weight: 1
+      - path: DonArmature/hips/thigh.L
+        weight: 1
+      - path: DonArmature/hips/thigh.L/shin.L
+        weight: 1
+      - path: DonArmature/hips/thigh.L/shin.L/foot.L
+        weight: 1
+      - path: DonArmature/hips/thigh.L/shin.L/foot.L/toe.L
+        weight: 1
+      - path: DonArmature/hips/thigh.L/shin.L/foot.L/toe.L/toe.L_end
+        weight: 1
+      - path: DonArmature/hips/thigh.L/shin.L/heel.L
+        weight: 1
+      - path: DonArmature/hips/thigh.L/shin.L/heel.L/heel.02.L
+        weight: 1
+      - path: DonArmature/hips/thigh.L/shin.L/heel.L/heel.02.L/heel.02.L_end
+        weight: 1
+      - path: DonArmature/hips/thigh.R
+        weight: 1
+      - path: DonArmature/hips/thigh.R/shin.R
+        weight: 1
+      - path: DonArmature/hips/thigh.R/shin.R/foot.R
+        weight: 1
+      - path: DonArmature/hips/thigh.R/shin.R/foot.R/toe.R
+        weight: 1
+      - path: DonArmature/hips/thigh.R/shin.R/foot.R/toe.R/toe.R_end
+        weight: 1
+      - path: DonArmature/hips/thigh.R/shin.R/heel.R
+        weight: 1
+      - path: DonArmature/hips/thigh.R/shin.R/heel.R/heel.02.R
+        weight: 1
+      - path: DonArmature/hips/thigh.R/shin.R/heel.R/heel.02.R/heel.02.R_end
+        weight: 1
+      - path: mesh_Don
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Don|Run
+      takeName: DonArmature|Run01
+      firstFrame: 0
+      lastFrame: 32
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: DonArmature
+        weight: 1
+      - path: DonArmature/hips
+        weight: 1
+      - path: DonArmature/hips/spine
+        weight: 1
+      - path: DonArmature/hips/spine/chest
+        weight: 1
+      - path: DonArmature/hips/spine/chest/neck
+        weight: 1
+      - path: DonArmature/hips/spine/chest/neck/head
+        weight: 1
+      - path: DonArmature/hips/spine/chest/neck/head/head_end
+        weight: 1
+      - path: DonArmature/hips/spine/chest/shoulder.L
+        weight: 1
+      - path: DonArmature/hips/spine/chest/shoulder.L/upper_arm.L
+        weight: 1
+      - path: DonArmature/hips/spine/chest/shoulder.L/upper_arm.L/forearm.L
+        weight: 1
+      - path: DonArmature/hips/spine/chest/shoulder.L/upper_arm.L/forearm.L/forearm.L_end
+        weight: 1
+      - path: DonArmature/hips/spine/chest/shoulder.R
+        weight: 1
+      - path: DonArmature/hips/spine/chest/shoulder.R/upper_arm.R
+        weight: 1
+      - path: DonArmature/hips/spine/chest/shoulder.R/upper_arm.R/forearm.R
+        weight: 1
+      - path: DonArmature/hips/spine/chest/shoulder.R/upper_arm.R/forearm.R/forearm.R_end
+        weight: 1
+      - path: DonArmature/hips/thigh.L
+        weight: 1
+      - path: DonArmature/hips/thigh.L/shin.L
+        weight: 1
+      - path: DonArmature/hips/thigh.L/shin.L/foot.L
+        weight: 1
+      - path: DonArmature/hips/thigh.L/shin.L/foot.L/toe.L
+        weight: 1
+      - path: DonArmature/hips/thigh.L/shin.L/foot.L/toe.L/toe.L_end
+        weight: 1
+      - path: DonArmature/hips/thigh.L/shin.L/heel.L
+        weight: 1
+      - path: DonArmature/hips/thigh.L/shin.L/heel.L/heel.02.L
+        weight: 1
+      - path: DonArmature/hips/thigh.L/shin.L/heel.L/heel.02.L/heel.02.L_end
+        weight: 1
+      - path: DonArmature/hips/thigh.R
+        weight: 1
+      - path: DonArmature/hips/thigh.R/shin.R
+        weight: 1
+      - path: DonArmature/hips/thigh.R/shin.R/foot.R
+        weight: 1
+      - path: DonArmature/hips/thigh.R/shin.R/foot.R/toe.R
+        weight: 1
+      - path: DonArmature/hips/thigh.R/shin.R/foot.R/toe.R/toe.R_end
+        weight: 1
+      - path: DonArmature/hips/thigh.R/shin.R/heel.R
+        weight: 1
+      - path: DonArmature/hips/thigh.R/shin.R/heel.R/heel.02.R
+        weight: 1
+      - path: DonArmature/hips/thigh.R/shin.R/heel.R/heel.02.R/heel.02.R_end
+        weight: 1
+      - path: mesh_Don
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 0.35
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
