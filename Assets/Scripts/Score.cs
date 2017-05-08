@@ -5,10 +5,6 @@ using UnityEngine;
 public class Score : MonoBehaviour {
 
 	//Variables
-	[Tooltip("The change in score per second.")]
-	public float scoreSpeed = 0f;
-	[Tooltip("The change in scoreSpeed per second.")]
-	public float scoreAcceleration = 0f;
 	[Tooltip("The change in difficulty per second.")]
 	public float difficultySpeed = 0f;
 	[Tooltip("The change in difficultySpeed per difficulty increase.")]
@@ -32,17 +28,18 @@ public class Score : MonoBehaviour {
 	[Tooltip("The ball parent.")]
 	public Transform ballParent;
 
-	public static int score = 0;
+	public static float time = 0;
 	public static int difficulty = 1;
+	public static bool gameStarted = false;
 
-	private bool gameStarted = false;
-	private float _score = 0f;
 	private float difficultyTime = 0f;
 
 	private GameObject[] spawnPoints;
 
 	void Start(){
-		score = 0;
+
+		time = 0f;
+			
 		difficulty = 1;
 
 		difficultyTime = 1f / difficultySpeed;
@@ -55,19 +52,16 @@ public class Score : MonoBehaviour {
 
 		if ((gameStarted) && (NPC.playerCaught == false)) {
 			
-			scoreSpeed += Time.deltaTime * scoreAcceleration;
-
-			_score += Time.deltaTime * scoreSpeed;
-
-			score = (int)Mathf.Floor (_score);
-
 			if (difficultyTime <= 0f) {
 				IncreaseDifficulty ();
 			}
 			
 			difficultyTime -= Time.deltaTime;
-			Debug.Log ("Score: " + score.ToString () + " Difficulty: " + difficulty.ToString());
+
+			time += Time.deltaTime;
+
 		} else {
+			//Start the game
 			if (Input.GetKeyDown (KeyCode.Space))
 				StartGame ();
 		}
