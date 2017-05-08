@@ -333,6 +333,12 @@ public class GuardAI : MonoBehaviour {
 			//will seem to teleport back to the parent object, instead of where the rigidbodies appeared to stop on the ground.
 			//That explanation may sound confusing, but you can comment out these lines to see what I'm on about.
 
+			//Increase Difficulty
+			steeringSpd -= 0.1f;
+			maxSpeed += 0.5f;
+			recoverTime -= 0.5f;
+			sideStepSpeed += 0.5f;
+
 		}
 	}
 
