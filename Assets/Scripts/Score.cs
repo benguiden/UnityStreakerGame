@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Score : MonoBehaviour {
 
@@ -42,6 +43,8 @@ public class Score : MonoBehaviour {
 			
 		difficulty = 1;
 
+		gameStarted = false;
+
 		difficultyTime = 1f / difficultySpeed;
 
 		spawnPoints = GameObject.FindGameObjectsWithTag ("Respawn");
@@ -64,7 +67,16 @@ public class Score : MonoBehaviour {
 			//Start the game
 			if (Input.GetKeyDown (KeyCode.Space))
 				StartGame ();
+			else if (Input.GetKeyDown (KeyCode.Escape)) {
+				Application.Quit ();
+			}
 		}
+
+		if (NPC.playerCaught) {
+			if (Input.anyKeyDown)
+				SceneManager.LoadScene (0);
+		}
+
 	}
 
 	private void IncreaseDifficulty(){

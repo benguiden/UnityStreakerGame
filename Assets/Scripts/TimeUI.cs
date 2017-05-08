@@ -18,14 +18,18 @@ public class TimeUI : MonoBehaviour {
 
 	void Update () {
 		if (Score.gameStarted) {
-			string timeStr = "";
-			//Check if the seconds is less than 10, then add a 0 before the seconds
-			if (Mathf.Floor (Score.time % 60f) >= 10) {
-				timeStr = Mathf.Floor (Score.time / 60f).ToString () + ":" + Mathf.Floor (Score.time % 60f).ToString ();
+			if (NPC.playerCaught) {
+				textUI.color = new Color (0.85f, 0.05f, 0.05f);
 			} else {
-				timeStr = Mathf.Floor (Score.time / 60f).ToString () + ":0" + Mathf.Floor (Score.time % 60f).ToString ();
+				string timeStr = "";
+				//Check if the seconds is less than 10, then add a 0 before the seconds
+				if (Mathf.Floor (Score.time % 60f) >= 10) {
+					timeStr = Mathf.Floor (Score.time / 60f).ToString () + ":" + Mathf.Floor (Score.time % 60f).ToString ();
+				} else {
+					timeStr = Mathf.Floor (Score.time / 60f).ToString () + ":0" + Mathf.Floor (Score.time % 60f).ToString ();
+				}
+				textUI.text = timeStr;
 			}
-			textUI.text = timeStr;
 		}
 
 	}
