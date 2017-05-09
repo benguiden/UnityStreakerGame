@@ -36,6 +36,7 @@ public class Score : MonoBehaviour {
 	private float difficultyTime = 0f;
 
 	private GameObject[] spawnPoints;
+	private PlayerController playerCon;
 
 	void Start(){
 
@@ -48,6 +49,8 @@ public class Score : MonoBehaviour {
 		difficultyTime = 1f / difficultySpeed;
 
 		spawnPoints = GameObject.FindGameObjectsWithTag ("Respawn");
+
+		playerCon = player.GetComponent<PlayerController> ();
 
 	}
 
@@ -99,13 +102,9 @@ public class Score : MonoBehaviour {
 			NPC._NPCs.Add(newNPC);
 
 			GuardAI ai = newNPC.GetComponent<GuardAI> ();
-			ai.maxSpeed += 4f * ((float)difficulty / 25f);
-			ai.sideStepSpeed += 1f * ((float)difficulty / 25f);
-			ai.recoverTime -= 1f * ((float)difficulty / 25f);
-			if (ai.recoverTime < 1f) {
-				ai.recoverTime = 1f;
-			}
-			ai.steeringSpd = Mathf.Clamp01 (ai.steeringSpd + (0.15f * ((float)difficulty / 25f)));
+			ai.maxSpeed += 4f * ((float)difficulty / 30f);
+			ai.sideStepSpeed += 1.5f * ((float)difficulty / 30f);
+			ai.steeringSpd = Mathf.Clamp01 (ai.steeringSpd + (0.15f * ((float)difficulty / 30f)));
 		}else{
 			//Spawn Gaurd with a 2 in 3 chance
 			GameObject newNPC = (GameObject)Instantiate (guardPrefab, newSpawn);
@@ -115,13 +114,9 @@ public class Score : MonoBehaviour {
 			NPC._NPCs.Add(newNPC);
 
 			GuardAI ai = newNPC.GetComponent<GuardAI> ();
-			ai.maxSpeed += 3f * ((float)difficulty / 25f);
-			ai.sideStepSpeed += 2f * ((float)difficulty / 25f);
-			ai.recoverTime -= 1.5f * ((float)difficulty / 25f);
-			if (ai.recoverTime < 1f) {
-				ai.recoverTime = 1f;
-			}
-			ai.steeringSpd = Mathf.Clamp01 (ai.steeringSpd + (0.2f * ((float)difficulty / 20f)));
+			ai.maxSpeed += 3f * ((float)difficulty / 30f);
+			ai.sideStepSpeed += 2.5f * ((float)difficulty / 30f);
+			ai.steeringSpd = Mathf.Clamp01 (ai.steeringSpd + (0.2f * ((float)difficulty / 30f)));
 		}
 
 		//Spawn Ball
@@ -131,6 +126,9 @@ public class Score : MonoBehaviour {
 			newball.transform.parent = ballParent;
 			newball.GetComponent<BallInit> ().Init (40f);
 		}
+
+		//Increases player speed
+		playerCon.maxSpeed = 9f + (2.5f * ((float)difficulty/30f));
 
 	}
 

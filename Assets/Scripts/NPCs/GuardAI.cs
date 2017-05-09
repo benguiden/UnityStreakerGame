@@ -27,7 +27,8 @@ public class GuardAI : MonoBehaviour {
 	[Tooltip("The angle from the target that the controller desides to get in the targets way, instead of moving towards the target.")]
 	public float faceAngle = 135f;
 
-	private float speed, acceleration, recoverCount, safeCount/*The counter to recover/safe time*/;
+	public float speed;
+	private float acceleration, recoverCount, safeCount/*The counter to recover/safe time*/;
 	private string state = "chase"; //This is the state the AI is in and determines how it will act 
 
 	//Objects
@@ -105,6 +106,9 @@ public class GuardAI : MonoBehaviour {
 			//Set Animation state
 			anm.SetInteger("state", 0);
 
+			//Set Animation Speed
+			anm.SetFloat("playbackSpeed", speed/8f);
+
 			break;
 			////////////////////////////////////////////////
 
@@ -142,6 +146,9 @@ public class GuardAI : MonoBehaviour {
 
 			//Set Animation state
 			anm.SetInteger("state", 1);
+
+			//Set Animation Speed
+			anm.SetFloat("playbackSpeed", 1f);
 
 			break;
 			////////////////////////////////////////////////
@@ -223,7 +230,7 @@ public class GuardAI : MonoBehaviour {
 
 	//Check if guard collides with ragdolled guard or ragdolled player
 	void OnControllerColliderHit(ControllerColliderHit hit){
-		if ((state != "ragdoll") && (speed >= maxSpeed) && (safeCount <= 0f)) {
+		if ((state != "ragdoll") && (safeCount <= 0f)) {
 			if (hit.gameObject.tag == "NPCLimb") {
 				Transform limb = hit.gameObject.transform;
 				//Find parent guard object of the limb
@@ -321,6 +328,9 @@ public class GuardAI : MonoBehaviour {
 
 		} else {
 		//Disable
+
+			//Set Speed Back to 0
+			speed = 0f;
 
 			//'Disable' rigidbodies
 			foreach (Rigidbody rb in ragdollRBs) {
