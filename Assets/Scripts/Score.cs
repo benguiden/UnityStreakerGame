@@ -73,7 +73,7 @@ public class Score : MonoBehaviour {
 		}
 
 		if (NPC.playerCaught) {
-			if (Input.anyKeyDown)
+			if (Input.GetKeyDown (KeyCode.Space))
 				SceneManager.LoadScene (0);
 		}
 
@@ -88,34 +88,49 @@ public class Score : MonoBehaviour {
 		//Spawn NPC
 		Transform newSpawn = spawnPoints[Random.Range(0, spawnPoints.Length-1)].transform;
 
-		int ran = Random.Range(0, 2);
+		int ran = Random.Range(0, 4);
 
 		if (ran == 0) {
 			//Spawn Don with a 1 in 3 chance
 			GameObject newNPC = (GameObject)Instantiate (donPrefab, newSpawn);
 			newNPC.transform.parent = donParent;
 
+			//Add to NPC List
+			NPC._NPCs.Add(newNPC);
+
 			GuardAI ai = newNPC.GetComponent<GuardAI> ();
-			ai.maxSpeed += 6f * ((float)difficulty / 20f);
-			ai.sideStepSpeed += 1f * ((float)difficulty / 20f);
-			ai.recoverTime -= 1f * ((float)difficulty / 20f);
-			ai.steeringSpd = Mathf.Clamp01 (ai.steeringSpd + (1.5f * ((float)difficulty / 20f)));
+			ai.maxSpeed += 4f * ((float)difficulty / 25f);
+			ai.sideStepSpeed += 1f * ((float)difficulty / 25f);
+			ai.recoverTime -= 1f * ((float)difficulty / 25f);
+			if (ai.recoverTime < 1f) {
+				ai.recoverTime = 1f;
+			}
+			ai.steeringSpd = Mathf.Clamp01 (ai.steeringSpd + (0.15f * ((float)difficulty / 25f)));
 		}else{
 			//Spawn Gaurd with a 2 in 3 chance
 			GameObject newNPC = (GameObject)Instantiate (guardPrefab, newSpawn);
 			newNPC.transform.parent = guardParent;
 
+			//Add to NPC List
+			NPC._NPCs.Add(newNPC);
+
 			GuardAI ai = newNPC.GetComponent<GuardAI> ();
-			ai.maxSpeed += 4f * ((float)difficulty / 20f);
-			ai.sideStepSpeed += 2f * ((float)difficulty / 20f);
-			ai.recoverTime -= 1.5f * ((float)difficulty / 20f);
-			ai.steeringSpd = Mathf.Clamp01 (ai.steeringSpd + (2f * ((float)difficulty / 20f)));
+			ai.maxSpeed += 3f * ((float)difficulty / 25f);
+			ai.sideStepSpeed += 2f * ((float)difficulty / 25f);
+			ai.recoverTime -= 1.5f * ((float)difficulty / 25f);
+			if (ai.recoverTime < 1f) {
+				ai.recoverTime = 1f;
+			}
+			ai.steeringSpd = Mathf.Clamp01 (ai.steeringSpd + (0.2f * ((float)difficulty / 20f)));
 		}
 
 		//Spawn Ball
-		GameObject newball = (GameObject)Instantiate (ballPrefab, newSpawn);
-		newball.transform.parent = ballParent;
-		newball.GetComponent<BallInit> ().Init (40f);
+		int ranBall = Random.Range(0, 2);
+		if (ranBall == 0) {
+			GameObject newball = (GameObject)Instantiate (ballPrefab, newSpawn);
+			newball.transform.parent = ballParent;
+			newball.GetComponent<BallInit> ().Init (40f);
+		}
 
 	}
 
