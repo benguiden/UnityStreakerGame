@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour {
 			//Set Speed of running animation
 			AnimatorStateInfo nextState = anm.GetNextAnimatorStateInfo(0);
 			if (nextState.IsName ("Run"))
-				anm.speed = 0.5f + (speed / (2f * maxSpeed));
+				anm.SetFloat ("playbackSpeed", 0.5f + (speed / (2f * 9f)));
 			
 		}
 

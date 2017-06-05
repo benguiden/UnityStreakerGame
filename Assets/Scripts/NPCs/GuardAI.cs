@@ -18,12 +18,17 @@ public class GuardAI : MonoBehaviour {
 	public float diveDistance = 5f;
 	[Tooltip("How long it takes for the character to recover from ragdoll mode.")]
 	public float recoverTime = 2f;
+	[Tooltip("The amount of time the ai is safe from ragdolling off other ragdoll after standing back up.")]
+	public float safeTime = 1f;
 	[Tooltip("The speed that the controller steps side to side when facing and in the way of the target.")]
 	public float sideStepSpeed = 4f;
 	[Tooltip("The distance from the target that the controller desides to get in the targets way, instead of moving towards the target.")]
 	public float faceDistance = 35f;
+	[Tooltip("The angle from the target that the controller desides to get in the targets way, instead of moving towards the target.")]
+	public float faceAngle = 135f;
 
-	private float speed, acceleration, recoverCount/*The counter to recover time*/;
+	public float speed;
+	private float acceleration, recoverCount, safeCount/*The counter to recover/safe time*/;
 	private string state = "chase"; //This is the state the AI is in and determines how it will act 
 
 	//Objects
@@ -101,6 +106,9 @@ public class GuardAI : MonoBehaviour {
 			//Set Animation state
 			anm.SetInteger("state", 0);
 
+			//Set Animation Speed
+			anm.SetFloat("playbackSpeed", speed/8f);
+
 			break;
 			////////////////////////////////////////////////
 
@@ -138,6 +146,9 @@ public class GuardAI : MonoBehaviour {
 
 			//Set Animation state
 			anm.SetInteger("state", 1);
+
+			//Set Animation Speed
+			anm.SetFloat("playbackSpeed", 1f);
 
 			break;
 			////////////////////////////////////////////////
@@ -187,7 +198,7 @@ public class GuardAI : MonoBehaviour {
 			}
 
 			//Change state 
-			if ((distanceToTarget > faceDistance + 10f) || (facingAngle > 90f) || (facingAngle < -90f) || (NPC.playerCaught == true)){
+			if ((distanceToTarget > faceDistance + 10f) || (facingAngle > Mathf.Abs(faceAngle)) || (facingAngle < -Mathf.Abs(faceAngle)) || (NPC.playerCaught == true)){
 				state = "chase";
 				capCollider.enabled = false;
 				anm.SetFloat ("playbackSpeed", 1f);
@@ -200,6 +211,12 @@ public class GuardAI : MonoBehaviour {
 			////////////////////////////////////////////////
 
 		}
+
+		//Safe Time
+		if ((state != "ragdoll") && (safeCount > 0f)) {
+			safeCount -= Time.deltaTime;
+		}
+
 	}
 		
 	//Call when the player collides with the Guard
@@ -213,7 +230,7 @@ public class GuardAI : MonoBehaviour {
 
 	//Check if guard collides with ragdolled guard or ragdolled player
 	void OnControllerColliderHit(ControllerColliderHit hit){
-		if ((state != "ragdoll") && (speed >= maxSpeed)) {
+		if ((state != "ragdoll") && (safeCount <= 0f)) {
 			if (hit.gameObject.tag == "NPCLimb") {
 				Transform limb = hit.gameObject.transform;
 				//Find parent guard object of the limb
@@ -312,6 +329,9 @@ public class GuardAI : MonoBehaviour {
 		} else {
 		//Disable
 
+			//Set Speed Back to 0
+			speed = 0f;
+
 			//'Disable' rigidbodies
 			foreach (Rigidbody rb in ragdollRBs) {
 				rb.isKinematic = true;
@@ -326,6 +346,9 @@ public class GuardAI : MonoBehaviour {
 			//Enable collisions will the capsule
 			controller.enabled = true;
 			capCollider.enabled = true;
+
+			//Set safe time
+			safeCount = safeTime;	
 
 			//Translate the Guard parent of the rigidbodies to the position of the 'main' bone
 			Vector3 bonePos = ragdollRBs[0].gameObject.transform.position; //We do this because when the rigidbodies are active (not kinematic), the children objects will translate away from the main parent object,
