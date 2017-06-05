@@ -8,6 +8,14 @@ public class MouseLook : MonoBehaviour {
 
 	public Vector2 rotateSpd;
 	public float minAngle, maxAngle;
+	public bool hideMouse;
+
+	void Start(){
+		Cursor.visible = !hideMouse;
+		if (hideMouse) {
+			Cursor.lockState = CursorLockMode.Locked;
+		}
+	}
 
 	void Update(){
 		
