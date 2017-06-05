@@ -34,6 +34,7 @@ public class Score : MonoBehaviour {
 	public static bool gameStarted = false;
 
 	private float difficultyTime = 0f;
+	private float restartTime = 1f;
 
 	private GameObject[] spawnPoints;
 
@@ -73,8 +74,11 @@ public class Score : MonoBehaviour {
 		}
 
 		if (NPC.playerCaught) {
-			if (Input.anyKeyDown)
+			if (restartTime > 0f) {
+				restartTime -= Time.deltaTime;
+			} else if (Input.anyKeyDown) {
 				SceneManager.LoadScene (0);
+			}
 		}
 
 	}
